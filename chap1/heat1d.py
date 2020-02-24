@@ -53,7 +53,7 @@ def set_boundary(array, b0=None, bN=None, firstStep=False):
         array[-1] = bN
     return array
 
-def plot(array, x=None, dt=None, methodName=None):
+def plot(array, x=None, dt=None, methodName=None, fname=None, useylim=False, ylim=[-2,2] ):
     if x is None:
         x = np.linspace(start=0, stop=1, num=array.shape[0])
 
@@ -71,12 +71,16 @@ def plot(array, x=None, dt=None, methodName=None):
             plt.plot(x, array[:, i], ".", color="blue")
             plt.xlabel("space")
             plt.ylabel("Temperature")
+            if useylim:
+                plt.ylim(ylim)
             if dt is not None:
                 plt.title("{1} t = {0:4f}".format(i*dt, title))
                 # plt.title("explicit euler t = {0:4f}".format(i*dt, title))
 
         ani = anm.FuncAnimation(fig, update, fargs=(methodName))
-        ani.save("sample.gif", writer="pillow")
+        if fname is None:
+            fname = "sample"
+        ani.save(fname, writer="pillow")
         # plt.show()
 
 def explicit_euler(array, step, alpha, b0=None, bN=None, accurate=2):
